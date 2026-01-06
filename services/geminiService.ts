@@ -102,7 +102,7 @@ export async function gradeCall(transcript: string, persona: Persona, lang: Lang
     `;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.5-flash-lite',
       contents: gradingPrompt,
       config: {
         responseMimeType: "application/json",

@@ -65,7 +65,7 @@ export class LiveClient {
     }
 
     this.sessionPromise = this.client.live.connect({
-      model: 'gemini-2.0-flash-live-001',
+      model: 'gemini-2.5-flash-native-audio-dialog',
       callbacks: {
         onopen: this.handleOpen.bind(this),
         onmessage: this.handleMessage.bind(this),
