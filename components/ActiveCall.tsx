@@ -52,10 +52,10 @@ export const ActiveCall: React.FC<ActiveCallProps> = ({ persona, onEndCall }) =>
 
               // Check for termination signal from AI
               if (!isUser && text.includes('[[END_CALL]]')) {
-                console.log("End call signal detected. Terminating in 3s...");
+                console.log("End call signal detected. Terminating in 7s...");
                 setTimeout(() => {
                   handleHangUp();
-                }, 3000);
+                }, 7000);
               }
             }
           },
