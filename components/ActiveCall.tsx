@@ -49,6 +49,14 @@ export const ActiveCall: React.FC<ActiveCallProps> = ({ persona, onEndCall }) =>
               const line = `${isUser ? 'You' : persona.name}: ${text}\n`;
               transcriptRef.current += line;
               setTranscript(prev => prev + line);
+
+              // Check for termination signal from AI
+              if (!isUser && text.includes('[[END_CALL]]')) {
+                console.log("End call signal detected. Terminating in 3s...");
+                setTimeout(() => {
+                  handleHangUp();
+                }, 3000);
+              }
             }
           },
           onClose: () => {
@@ -267,9 +275,9 @@ export const ActiveCall: React.FC<ActiveCallProps> = ({ persona, onEndCall }) =>
             }}
             disabled={status !== 'connected' || testStatus === 'testing'}
             className={`p-4 rounded-full transition-all duration-200 ${testStatus === 'success' ? 'bg-green-500 text-white' :
-                testStatus === 'failed' ? 'bg-red-500 text-white' :
-                  testStatus === 'testing' ? 'bg-yellow-500 text-white animate-pulse' :
-                    'bg-slate-800 text-white hover:bg-slate-700 border border-slate-700'
+              testStatus === 'failed' ? 'bg-red-500 text-white' :
+                testStatus === 'testing' ? 'bg-yellow-500 text-white animate-pulse' :
+                  'bg-slate-800 text-white hover:bg-slate-700 border border-slate-700'
               } ${status !== 'connected' ? 'opacity-50 cursor-not-allowed' : 'shadow-lg'}`}
             title="Test if AI is responding"
           >
