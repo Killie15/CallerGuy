@@ -2,7 +2,7 @@ import React from 'react';
 import { CallSession, RubricItem } from '../types';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { ArrowPathIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/outline';
-import {  PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface PostCallFeedbackProps {
   session: CallSession;
@@ -29,7 +29,7 @@ export const PostCallFeedback: React.FC<PostCallFeedbackProps> = ({ session, onB
           <ClipboardDocumentListIcon className="w-8 h-8 text-blue-500" />
           Call Analysis
         </h2>
-        <button 
+        <button
           onClick={onBackToDashboard}
           className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition-colors"
         >
@@ -43,49 +43,58 @@ export const PostCallFeedback: React.FC<PostCallFeedbackProps> = ({ session, onB
         <div className="col-span-1 bg-slate-800/50 border border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
           <h3 className="text-slate-400 font-medium mb-4 uppercase tracking-widest text-sm">Overall Score</h3>
-          
+
           <div className="h-48 w-full relative">
-             <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={chartData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    startAngle={90}
-                    endAngle={-270}
-                    dataKey="value"
-                    stroke="none"
-                  >
-                    {chartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                </PieChart>
-             </ResponsiveContainer>
-             <div className="absolute inset-0 flex items-center justify-center flex-col">
-                <span className={`text-5xl font-bold ${getScoreColor(session.overallScore)}`}>
-                  {session.overallScore}
-                </span>
-                <span className="text-slate-500 text-sm">/ 100</span>
-             </div>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  startAngle={90}
+                  endAngle={-270}
+                  dataKey="value"
+                  stroke="none"
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="absolute inset-0 flex items-center justify-center flex-col">
+              <span className={`text-5xl font-bold ${getScoreColor(session.overallScore)}`}>
+                {session.overallScore}
+              </span>
+              <span className="text-slate-500 text-sm">/ 100</span>
+            </div>
           </div>
         </div>
 
         {/* Summary Card */}
         <div className="col-span-1 md:col-span-2 bg-slate-800/50 border border-slate-700 rounded-2xl p-6">
-           <h3 className="text-slate-400 font-medium mb-4 uppercase tracking-widest text-sm">Coach's Summary</h3>
-           <p className="text-slate-200 leading-relaxed text-lg">
-             {session.summary}
-           </p>
-           
-           <div className="mt-6 pt-6 border-t border-slate-700">
-             <h4 className="text-sm font-semibold text-slate-400 mb-2">Transcript Snippet</h4>
-             <div className="bg-slate-900 p-4 rounded-lg h-32 overflow-y-auto text-sm text-slate-400 font-mono">
-               {session.transcript || "No transcript recorded."}
-             </div>
-           </div>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-slate-400 font-medium uppercase tracking-widest text-sm">Coach's Summary</h3>
+            <button
+              onClick={onBackToDashboard}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors font-medium"
+            >
+              <ArrowPathIcon className="w-5 h-5" />
+              Practice Again
+            </button>
+          </div>
+          <p className="text-slate-200 leading-relaxed text-lg">
+            {session.summary}
+          </p>
+
+          <div className="mt-6 pt-6 border-t border-slate-700">
+            <h4 className="text-sm font-semibold text-slate-400 mb-2">Transcript Snippet</h4>
+            <div className="bg-slate-900 p-4 rounded-lg h-32 overflow-y-auto text-sm text-slate-400 font-mono">
+              {session.transcript || "No transcript recorded."}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -98,13 +107,13 @@ export const PostCallFeedback: React.FC<PostCallFeedbackProps> = ({ session, onB
               <div className="flex items-center justify-between mb-2">
                 <h4 className="font-semibold text-slate-200">{item.category}</h4>
                 <div className="flex items-center gap-1">
-                   {[...Array(10)].map((_, i) => (
-                      <div 
-                        key={i} 
-                        className={`w-2 h-6 rounded-sm ${i < item.score ? (item.score > 7 ? 'bg-green-500' : 'bg-yellow-500') : 'bg-slate-700'}`}
-                      ></div>
-                   ))}
-                   <span className="ml-2 text-white font-bold">{item.score}/10</span>
+                  {[...Array(10)].map((_, i) => (
+                    <div
+                      key={i}
+                      className={`w-2 h-6 rounded-sm ${i < item.score ? (item.score > 7 ? 'bg-green-500' : 'bg-yellow-500') : 'bg-slate-700'}`}
+                    ></div>
+                  ))}
+                  <span className="ml-2 text-white font-bold">{item.score}/10</span>
                 </div>
               </div>
               <p className="text-slate-400 text-sm">{item.feedback}</p>

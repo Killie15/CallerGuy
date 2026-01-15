@@ -9,6 +9,7 @@ interface PersonaCardProps {
 
 const difficultyColor = {
   'Easy': 'text-green-400 border-green-400/30 bg-green-400/10',
+  'Normal': 'text-blue-400 border-blue-400/30 bg-blue-400/10',
   'Medium': 'text-yellow-400 border-yellow-400/30 bg-yellow-400/10',
   'Hard': 'text-orange-400 border-orange-400/30 bg-orange-400/10',
   'Expert': 'text-red-500 border-red-500/30 bg-red-500/10',
@@ -16,11 +17,11 @@ const difficultyColor = {
 
 export const PersonaCard: React.FC<PersonaCardProps> = ({ persona, onSelect, isSelected }) => {
   return (
-    <div 
+    <div
       onClick={() => onSelect(persona)}
       className={`relative p-6 rounded-xl border-2 cursor-pointer transition-all duration-300 hover:shadow-lg group
-        ${isSelected 
-          ? 'border-blue-500 bg-slate-800 shadow-blue-500/20' 
+        ${isSelected
+          ? 'border-blue-500 bg-slate-800 shadow-blue-500/20'
           : 'border-slate-700 bg-slate-800/50 hover:border-slate-500 hover:bg-slate-800'
         }
       `}
@@ -37,7 +38,7 @@ export const PersonaCard: React.FC<PersonaCardProps> = ({ persona, onSelect, isS
           {persona.difficulty}
         </span>
       </div>
-      
+
       <p className="text-slate-300 text-sm mb-4 line-clamp-2">
         {persona.description}
       </p>
@@ -52,7 +53,7 @@ export const PersonaCard: React.FC<PersonaCardProps> = ({ persona, onSelect, isS
           ))}
         </div>
       </div>
-      
+
       {isSelected && (
         <div className="absolute inset-0 rounded-xl border-2 border-blue-500 pointer-events-none animate-pulse opacity-50"></div>
       )}

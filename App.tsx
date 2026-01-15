@@ -73,6 +73,7 @@ function App() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [showShareToast, setShowShareToast] = useState(false);
   const [apiKeyValid, setApiKeyValid] = useState(true);
+  const [showFullscreenLeaderboard, setShowFullscreenLeaderboard] = useState(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
   // Initialization
@@ -272,13 +273,13 @@ function App() {
                 <BoltIcon className="w-5 h-5 text-white" />
               </div>
               <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 tracking-tight">
-                ColdCall AI
+                SimTrainingSystem
               </span>
             </div>
 
             <div className="flex items-center gap-3 sm:gap-4">
-              {/* Language Switcher */}
-              <div className="flex bg-slate-800/80 rounded-lg p-1 border border-slate-700/50">
+              {/* Language Switcher - Hidden but functionality preserved */}
+              {/* <div className="flex bg-slate-800/80 rounded-lg p-1 border border-slate-700/50">
                 <button
                   onClick={() => toggleLanguage('en')}
                   className={`px-2 py-0.5 text-xs font-semibold rounded cursor-pointer transition-all ${language === 'en' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}
@@ -291,7 +292,7 @@ function App() {
                 >
                   JP
                 </button>
-              </div>
+              </div> */}
 
               {appState === AppState.DASHBOARD && (
                 <button
@@ -417,7 +418,18 @@ function App() {
                   )}
                 </div>
 
-                <Leaderboard sessions={sessions} />
+                <div className="relative">
+                  <button
+                    onClick={() => setShowFullscreenLeaderboard(true)}
+                    className="absolute -top-1 -right-1 p-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-slate-300 z-10 transition-colors"
+                    title="View Full Leaderboard"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                      <path d="M13.28 7.78l3.22-3.22v2.69a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.69l-3.22 3.22a.75.75 0 001.06 1.06zM2 17.25v-4.5a.75.75 0 011.5 0v2.69l3.22-3.22a.75.75 0 011.06 1.06L4.56 16.5h2.69a.75.75 0 010 1.5h-4.5a.75.75 0 01-.75-.75z" />
+                    </svg>
+                  </button>
+                  <Leaderboard />
+                </div>
               </div>
             </div>
           )}
@@ -440,8 +452,17 @@ function App() {
         </main>
 
         <footer className="border-t border-slate-800 bg-slate-900/50 py-4 text-center text-slate-600 text-xs">
-          <p>© 2025 ColdCall AI. Built with Gemini Multimodal Live API.</p>
+          <p>© 2026 SimTrainingSystem. Built by Martin White</p>
         </footer>
+
+        {/* Fullscreen Leaderboard Overlay */}
+        {showFullscreenLeaderboard && (
+          <div className="fixed inset-0 bg-slate-900/95 backdrop-blur-md z-[90] flex items-center justify-center p-4 animate-fade-in">
+            <div className="w-full max-w-2xl max-h-[90vh]">
+              <Leaderboard fullscreen={true} onClose={() => setShowFullscreenLeaderboard(false)} />
+            </div>
+          </div>
+        )}
 
         {/* Processing Overlay */}
         {isProcessing && (

@@ -1,5 +1,5 @@
 {
-  "name": "ColdCall AI",
+  "name": "SimTrainingSystem",
   "description": "An AI-powwered cold calling roleplay trainer. Practice against diverse customer personas, get real-time voice feedback, and compete on the team leaderboard.",
   "requestFramePermissions": [
     "microphone"

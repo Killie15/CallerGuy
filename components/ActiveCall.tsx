@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Persona } from '../types';
 import { LiveClient } from '../services/liveClient';
-import { PhoneIcon, MicrophoneIcon, SpeakerWaveIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { PhoneIcon, MicrophoneIcon, SpeakerWaveIcon, XMarkIcon, BoltIcon } from '@heroicons/react/24/solid';
 
 interface ActiveCallProps {
   persona: Persona;
@@ -15,6 +15,7 @@ export const ActiveCall: React.FC<ActiveCallProps> = ({ persona, onEndCall }) =>
   const [transcript, setTranscript] = useState<string>('');
   const [isMuted, setIsMuted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'failed'>('idle');
 
   const liveClientRef = useRef<LiveClient | null>(null);
   const timerRef = useRef<number | null>(null);
@@ -223,8 +224,8 @@ export const ActiveCall: React.FC<ActiveCallProps> = ({ persona, onEndCall }) =>
             onClick={handleToggleMute}
             disabled={status !== 'connected'}
             className={`p-4 rounded-full transition-all duration-200 ${isMuted
-                ? 'bg-white text-red-500 hover:bg-slate-200'
-                : 'bg-slate-800 text-white hover:bg-slate-700 border border-slate-700'
+              ? 'bg-white text-red-500 hover:bg-slate-200'
+              : 'bg-slate-800 text-white hover:bg-slate-700 border border-slate-700'
               } ${status !== 'connected' ? 'opacity-50 cursor-not-allowed' : 'shadow-lg'}`}
           >
             <MicrophoneIcon className="w-6 h-6 sm:w-7 sm:h-7" />
@@ -247,6 +248,36 @@ export const ActiveCall: React.FC<ActiveCallProps> = ({ persona, onEndCall }) =>
             <SpeakerWaveIcon className="w-6 h-6 sm:w-7 sm:h-7" />
           </button>
           <span className="text-[10px] sm:text-xs font-medium text-slate-500 uppercase tracking-wider">Speaker</span>
+        </div>
+
+        <div className="flex flex-col items-center gap-2">
+          <button
+            onClick={() => {
+              setTestStatus('testing');
+              // The AI should respond naturally since it's listening
+              // Just show that we're testing and wait for response
+              setTimeout(() => {
+                if (status === 'connected') {
+                  setTestStatus('success');
+                } else {
+                  setTestStatus('failed');
+                }
+                setTimeout(() => setTestStatus('idle'), 2000);
+              }, 1500);
+            }}
+            disabled={status !== 'connected' || testStatus === 'testing'}
+            className={`p-4 rounded-full transition-all duration-200 ${testStatus === 'success' ? 'bg-green-500 text-white' :
+                testStatus === 'failed' ? 'bg-red-500 text-white' :
+                  testStatus === 'testing' ? 'bg-yellow-500 text-white animate-pulse' :
+                    'bg-slate-800 text-white hover:bg-slate-700 border border-slate-700'
+              } ${status !== 'connected' ? 'opacity-50 cursor-not-allowed' : 'shadow-lg'}`}
+            title="Test if AI is responding"
+          >
+            <BoltIcon className="w-6 h-6 sm:w-7 sm:h-7" />
+          </button>
+          <span className="text-[10px] sm:text-xs font-medium text-slate-500 uppercase tracking-wider">
+            {testStatus === 'testing' ? 'Testing...' : testStatus === 'success' ? 'Connected!' : testStatus === 'failed' ? 'Failed' : 'Test'}
+          </span>
         </div>
       </div>
 

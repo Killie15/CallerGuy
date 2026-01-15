@@ -5,7 +5,7 @@ export interface Persona {
   name: string;
   role: string;
   company: string;
-  difficulty: 'Easy' | 'Medium' | 'Hard' | 'Expert';
+  difficulty: 'Easy' | 'Normal' | 'Medium' | 'Hard' | 'Expert';
   description: string;
   objections: string[];
   systemInstruction: string;
