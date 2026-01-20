@@ -42,8 +42,13 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ fullscreen = false, on
       console.warn("Failed to parse local history", e);
     }
 
-    // 3. Merge & Sort
-    const combined = [...globalData, ...localData];
+    // 3. Merge & Sort (Global First / Smart Dedupe)
+    // We prioritize the global version. We only add a local session if its ID 
+    // is NOT already in the global list.
+    const globalIds = new Set(globalData.map(d => d.id));
+    const uniqueLocalData = localData.filter(d => !globalIds.has(d.id));
+
+    const combined = [...globalData, ...uniqueLocalData];
     combined.sort((a, b) => b.score - a.score);
     setEntries(combined.slice(0, 20));
     setLoading(false);
