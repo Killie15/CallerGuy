@@ -15,43 +15,16 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ fullscreen = false, on
     setLoading(true);
 
     // 1. Fetch Global from Supabase
-    let globalData: LeaderboardEntry[] = [];
     try {
-      globalData = await getLeaderboard(20);
+      const globalData = await getLeaderboard(20);
+      setEntries(globalData);
     } catch (e) {
       console.warn("Failed to fetch global leaderboard", e);
+      // If DB fails, we show nothing (or empty list) as requested
+      setEntries([]);
+    } finally {
+      setLoading(false);
     }
-
-    // 2. Fetch Local History
-    let localData: LeaderboardEntry[] = [];
-    try {
-      const saved = localStorage.getItem('coldcall_sessions');
-      if (saved) {
-        const sessions = JSON.parse(saved);
-        // Map CallSession to LeaderboardEntry
-        localData = sessions.map((s: any) => ({
-          id: s.id,
-          player_name: s.playerName,
-          persona_id: s.personaId,
-          score: s.overallScore,
-          summary: s.summary,
-          created_at: new Date(s.timestamp).toISOString()
-        }));
-      }
-    } catch (e) {
-      console.warn("Failed to parse local history", e);
-    }
-
-    // 3. Merge & Sort (Global First / Smart Dedupe)
-    // We prioritize the global version. We only add a local session if its ID 
-    // is NOT already in the global list.
-    const globalIds = new Set(globalData.map(d => d.id));
-    const uniqueLocalData = localData.filter(d => !globalIds.has(d.id));
-
-    const combined = [...globalData, ...uniqueLocalData];
-    combined.sort((a, b) => b.score - a.score);
-    setEntries(combined.slice(0, 20));
-    setLoading(false);
   };
 
   useEffect(() => {
