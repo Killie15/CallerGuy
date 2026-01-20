@@ -10,7 +10,7 @@ export function base64ToUint8Array(base64: string): Uint8Array {
   return bytes;
 }
 
-export function arrayBufferToBase64(buffer: ArrayBuffer): string {
+export function arrayBufferToBase64(buffer: ArrayBufferLike): string {
   let binary = '';
   const bytes = new Uint8Array(buffer);
   const len = bytes.byteLength;
@@ -51,9 +51,9 @@ export function float32ToPCM16(float32Arr: Float32Array): Int16Array {
 }
 
 export function createPcmBlob(data: Float32Array, sampleRate: number): Blob {
-    const int16 = float32ToPCM16(data);
-    return {
-      data: arrayBufferToBase64(int16.buffer),
-      mimeType: `audio/pcm;rate=${sampleRate}`,
-    };
+  const int16 = float32ToPCM16(data);
+  return {
+    data: arrayBufferToBase64(int16.buffer as ArrayBuffer),
+    mimeType: `audio/pcm;rate=${sampleRate}`,
+  };
 }
