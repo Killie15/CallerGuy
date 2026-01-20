@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, Component, type ReactNode, type ErrorInfo } from 'react';
 import { getPersonas, gradeCall, validateApiKey } from './services/geminiService';
+import { saveScore } from './services/supabaseClient';
 import { Persona, CallSession, AppState, Language } from './types';
 import { PersonaCard } from './components/PersonaCard';
 import { ActiveCall } from './components/ActiveCall';
@@ -215,6 +216,17 @@ function App() {
     setSessions(newSessions);
     localStorage.setItem('coldcall_sessions', JSON.stringify(newSessions));
     setCurrentSession(newSession);
+
+    // 4. Save to Global Leaderboard (Fire and forget)
+    saveScore({
+      player_name: playerName,
+      persona_id: selectedPersona.id,
+      score: grading.score,
+      summary: grading.summary,
+      transcript: transcript,
+      rubric: JSON.stringify(grading.rubric),
+      duration_seconds: 0 // Placeholder as duration isn't passed up yet
+    }).catch(err => console.error("[App] Failed to save to Supabase", err));
 
     setIsProcessing(false);
     setAppState(AppState.FEEDBACK);
